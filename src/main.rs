@@ -1,7 +1,8 @@
 use normuse_music_visualizer::widgets::dashboard::{self, Dashboard};
 use normuse_music_visualizer::types::conf::Conf;
 use iced::{application, window, Element, Length};
-use iced::widget::{column, container, grid, progress_bar, text, image};
+use iced::widget::{column, container, grid, progress_bar, text, image, canvas};
+use normuse_music_visualizer::widgets::visualizer;
 
 struct Normuse {
     conf: Conf,
@@ -30,10 +31,12 @@ impl Normuse {
     pub fn view(&self) -> Element<'_, Message>{
 
 
+
         let dashboard = &self.conf.dashboard;
         let emblem = &self.conf.emblem;
 
         column![
+            canvas(&self.conf.visualizer).width(iced::Fill).height(iced::Fill),
             container(
                 image("src\\assets\\default.png")
                 .height(300)
