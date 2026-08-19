@@ -62,8 +62,8 @@ impl Normuse {
             },
             Message::Tick => {
                 if !self.visualizer.player.empty() {
+                    self.visualizer.update();
                 }
-                self.visualizer.update();
             }
         }
     }

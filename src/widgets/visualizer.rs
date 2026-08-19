@@ -51,6 +51,8 @@ pub struct Visualizer {
     handle: MixerDeviceSink,
     tx: mpsc::SyncSender<f32>,
     decoder: Decoder<BufReader<File>>,
+    channels: u16,
+    current_frame: u32,
 }
 //"src/assets/test.wav"
 impl Visualizer {
@@ -71,11 +73,10 @@ impl Visualizer {
         let audio_streamer = AudioStreamer::new(rx, sample_rate, channels);
         player.append(audio_streamer);
 
-
         let data = vec![0.0f32; BUFFER_SIZE];
         let display = VisualizerDisplay { num_bars: num_bars, spacing: 0.0f32, data: data};
 
-        Visualizer { player: player, display: display, handle: handle, tx: tx, decoder: decoder }
+        Visualizer { player: player, display: display, handle: handle, tx: tx, decoder: decoder, channels: channels, current_frame: 0 }
     }
 
     pub fn queue_samples(&mut self, buf: &mut Vec<f32>) {
@@ -91,7 +92,11 @@ impl Visualizer {
     pub fn update(&mut self) {
         let mut buf:Vec<f32> = vec![0.0f32; BUFFER_SIZE];
         self.queue_samples(&mut buf);
-
+        
+        // Need to select every num channelth sample 
+        buf = buf.iter().enumerate().filter(|(i,_)| * i as u16 % self.channels == 0).map(|(_,val)| *val).collect();
+        
         self.display.data = buf;
+
     }
 }
