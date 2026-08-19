@@ -1,17 +1,19 @@
 use iced::window::Settings;
-use crate::widgets::{dashboard::Dashboard, emblem::Emblem,};
+use crate::widgets::{dashboard::Dashboard, emblem::Emblem, visualizer::Visualizer};
+
+const BUFFER_SIZE: u32 = 1024;
 
 pub struct Conf {
     pub window: Settings,
     pub dashboard: Dashboard,
-    pub emblem: Emblem
+    pub emblem: Emblem,
 }
 
 impl Conf {
 
     /// Default configuration settings 
     pub fn default() -> Conf {
-
+        
         let window = Settings::default();
         let dashboard = Dashboard::default();
         let emblem = Emblem::default();
@@ -19,7 +21,7 @@ impl Conf {
         Conf {
             window: window,
             dashboard: dashboard,
-            emblem: emblem
+            emblem: emblem,
         }
     }
 }
@@ -29,7 +31,7 @@ impl Clone for Conf {
         Conf {
             dashboard: self.dashboard.clone(),
             window: self.window.clone(),
-            emblem: self.emblem.clone()
+            emblem: self.emblem.clone(),
         }
     }
 }
